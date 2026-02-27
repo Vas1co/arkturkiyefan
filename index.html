@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARK – Mutagen & Mutasyon Rehberi</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050a0e;
+    --surface: #0a1520;
+    --surface2: #0f1e2d;
+    --border: #1a3a52;
+    --accent: #00d4ff;
+    --accent2: #7b2fff;
+    --green: #00ff88;
+    --red: #ff3a5c;
+    --gold: #ffd700;
+    --text: #c8e0f0;
+    --text-dim: #6a8fa8;
+    --glow: 0 0 20px rgba(0,212,255,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* BACKGROUND EFFECT */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 10% 20%, rgba(0,212,255,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 90% 80%, rgba(123,47,255,0.05) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* GRID OVERLAY */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  header {
+    padding: 60px 0 40px;
+    text-align: center;
+    position: relative;
+  }
+
+  .header-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(123,47,255,0.1));
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 6px 16px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(24px, 5vw, 48px);
+    font-weight: 900;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #ffffff 0%, var(--accent) 50%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    color: var(--text-dim);
+    font-size: 15px;
+    font-weight: 400;
+    max-width: 600px;
+    margin: 0 auto 30px;
+  }
+
+  /* DIVIDER */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    margin: 10px 0 50px;
+    opacity: 0.4;
+  }
+
+  /* NAV TABS */
+  .nav-tabs {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 50px;
+  }
+
+  .nav-tab {
+    padding: 8px 20px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-dim);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-transform: uppercase;
+  }
+
+  .nav-tab:hover, .nav-tab.active {
+    background: rgba(0,212,255,0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: var(--glow);
+  }
+
+  /* SECTIONS */
+  .section {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  .section.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .card:hover {
+    border-color: rgba(0,212,255,0.3);
+  }
+  .card:hover::before { opacity: 1; }
+
+  .card-accent-green::before { background: linear-gradient(90deg, var(--green), var(--accent)); opacity: 1; }
+  .card-accent-purple::before { background: linear-gradient(90deg, var(--accent2), #ff6b9d); opacity: 1; }
+  .card-accent-gold::before { background: linear-gradient(90deg, var(--gold), #ff8c00); opacity: 1; }
+  .card-accent-red::before { background: linear-gradient(90deg, var(--red), #ff8c00); opacity: 1; }
+
+  .card-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card-title .icon {
+    font-size: 18px;
+  }
+
+  /* SECTION HEADING */
+  .section-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-num {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 24px;
+  }
+
+  /* LISTS */
+  ul { list-style: none; }
+
+  ul li {
+    padding: 6px 0 6px 20px;
+    position: relative;
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  ul li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 12px;
+    top: 8px;
+  }
+
+  /* HIGHLIGHT BOXES */
+  .highlight {
+    background: rgba(0,212,255,0.05);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    border-radius: 0 6px 6px 0;
+    margin: 14px 0;
+    font-size: 15px;
+  }
+
+  .highlight.green { border-color: var(--green); background: rgba(0,255,136,0.05); }
+  .highlight.red { border-color: var(--red); background: rgba(255,58,92,0.05); }
+  .highlight.gold { border-color: var(--gold); background: rgba(255,215,0,0.05); }
+  .highlight.purple { border-color: var(--accent2); background: rgba(123,47,255,0.05); }
+
+  .highlight strong { color: var(--accent); }
+  .highlight.green strong { color: var(--green); }
+  .highlight.red strong { color: var(--red); }
+  .highlight.gold strong { color: var(--gold); }
+  .highlight.purple strong { color: var(--accent2); }
+
+  /* BAD LIST */
+  .bad-list li::before { content: '✗'; color: var(--red); }
+  .good-list li::before { content: '✓'; color: var(--green); }
+
+  /* GOLDEN RULE BOX */
+  .golden-rule {
+    background: linear-gradient(135deg, rgba(255,215,0,0.08), rgba(255,140,0,0.05));
+    border: 1px solid rgba(255,215,0,0.3);
+    border-radius: 8px;
+    padding: 24px;
+    margin: 20px 0;
+    text-align: center;
+  }
+
+  .golden-rule .rule-text {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 1px;
+    line-height: 1.5;
+  }
+
+  /* TABLE */
+  .table-wrapper {
+    overflow-x: auto;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  thead {
+    background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(123,47,255,0.1));
+  }
+
+  th {
+    padding: 14px 16px;
+    text-align: left;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(26,58,82,0.5);
+    font-weight: 500;
+    vertical-align: middle;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  tr:hover td { background: rgba(0,212,255,0.03); }
+
+  .check { color: var(--green); font-weight: 700; }
+  .cross { color: var(--red); font-weight: 700; }
+  .warn { color: var(--gold); font-weight: 700; }
+
+  /* SCENARIO BOX */
+  .scenario {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    font-family: 'Rajdhani', sans-serif;
+    margin: 16px 0;
+  }
+
+  .scenario-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+
+  .scenario-row {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(26,58,82,0.4);
+  }
+
+  .scenario-row:last-child { border-bottom: none; }
+
+  .scenario-label {
+    color: var(--text-dim);
+    font-size: 13px;
+    min-width: 120px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .scenario-value {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .scenario-value.highlight-green { color: var(--green); }
+  .scenario-value.highlight-accent { color: var(--accent); }
+
+  /* FLOW DIAGRAM */
+  .flow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 16px 0;
+    padding: 16px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 6px;
+  }
+
+  .flow-step {
+    background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(123,47,255,0.1));
+    border: 1px solid rgba(0,212,255,0.3);
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .flow-arrow {
+    color: var(--text-dim);
+    font-size: 18px;
+  }
+
+  /* MODE CARDS */
+  .mode-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 16px 0;
+  }
+
+  .mode-card {
+    border-radius: 8px;
+    padding: 18px;
+    border: 1px solid;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mode-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    filter: blur(20px);
+    opacity: 0.3;
+  }
+
+  .mode-pulse { border-color: rgba(0,255,136,0.3); background: rgba(0,255,136,0.05); }
+  .mode-pulse::after { background: var(--green); }
+  .mode-breed { border-color: rgba(123,47,255,0.4); background: rgba(123,47,255,0.07); }
+  .mode-breed::after { background: var(--accent2); }
+  .mode-gender { border-color: rgba(0,212,255,0.3); background: rgba(0,212,255,0.05); }
+  .mode-gender::after { background: var(--accent); }
+  .mode-stat { border-color: rgba(255,58,92,0.3); background: rgba(255,58,92,0.05); }
+  .mode-stat::after { background: var(--red); }
+
+  .mode-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .mode-pulse .mode-label { color: var(--green); }
+  .mode-breed .mode-label { color: var(--accent2); }
+  .mode-gender .mode-label { color: var(--accent); }
+  .mode-stat .mode-label { color: var(--red); }
+
+  .mode-desc {
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 500;
+    line-height: 1.6;
+  }
+
+  /* SUMMARY BOX */
+  .summary-box {
+    background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(123,47,255,0.08));
+    border: 1px solid rgba(0,212,255,0.25);
+    border-radius: 10px;
+    padding: 28px;
+    text-align: center;
+    margin-top: 30px;
+  }
+
+  .summary-box p {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.8;
+    letter-spacing: 0.5px;
+  }
+
+  .summary-box span.c1 { color: var(--accent); }
+  .summary-box span.c2 { color: var(--accent2); }
+  .summary-box span.c3 { color: var(--green); }
+  .summary-box span.c4 { color: var(--gold); }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 40px 0 60px;
+    color: var(--text-dim);
+    font-size: 13px;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+  }
+
+  footer::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin-bottom: 24px;
+  }
+
+  /* DINO BADGE */
+  .dino-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 14px 0;
+  }
+
+  .dino-tag {
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 4px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+  }
+
+  /* NOTE */
+  .note {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: rgba(255,215,0,0.05);
+    border: 1px solid rgba(255,215,0,0.2);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .note .note-icon { color: var(--gold); flex-shrink: 0; margin-top: 1px; }
+
+  p { font-size: 15px; font-weight: 500; margin-bottom: 10px; }
+
+  @media (max-width: 600px) {
+    .mode-grid { grid-template-columns: 1fr 1fr; }
+    .card { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="header-badge">🧬 PvE Rehberi</div>
+    <h1>ARK SURVIVAL EVOLVED</h1>
+    <p class="subtitle">Mutagen, Mutasyon ve Mutator sistem rehberi — Tek stat veya çoklu stat hedefleyen PvE oyuncuları için</p>
+    <div class="dino-tags" style="justify-content:center">
+      <span class="dino-tag">Managarmr</span>
+      <span class="dino-tag">Rex</span>
+      <span class="dino-tag">Shadowmane</span>
+      <span class="dino-tag">PvE Odaklı</span>
+    </div>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="nav-tabs">
+    <button class="nav-tab active" onclick="showSection('temel')">Temel Kavramlar</button>
+    <button class="nav-tab" onclick="showSection('mutasyon')">Mutasyon Hattı</button>
+    <button class="nav-tab" onclick="showSection('hatalar')">Hatalar & Senaryo</button>
+    <button class="nav-tab" onclick="showSection('mutator')">Mutator</button>
+    <button class="nav-tab" onclick="showSection('ozet')">Özet Tablo</button>
+  </nav>
+
+  <!-- SECTION 1: TEMEL -->
+  <div id="temel" class="section active">
+
+    <div class="card card-accent-green">
+      <div class="card-title"><span class="icon">💉</span> <span style="color:var(--green)">MUTAGEN</span></div>
+      <ul>
+        <li>Sadece <strong>wild'den tame edilmiş</strong> dinozora uygulanır</li>
+        <li>Amacı <strong>stat tavanını açmaktır</strong>, anlık güç vermez</li>
+        <li>Breed (yavru) dinoya basılan mutagen <strong style="color:var(--red)">NESLE GEÇMEZ</strong></li>
+        <li>Bir hatta <strong>1 kez yeterlidir</strong>, tekrar gerekmez</li>
+      </ul>
+      <div class="note">
+        <span class="note-icon">📌</span>
+        Mutagen mutasyon ilerletmez, sadece yol açar.
+      </div>
+    </div>
+
+    <div class="card card-accent-purple">
+      <div class="card-title"><span class="icon">🔬</span> <span style="color:var(--accent2)">MUTASYON</span></div>
+      <ul>
+        <li>Sadece <strong>breeding sırasında</strong> olur</li>
+        <li><strong>+2 level</strong> verir ve tek bir stat'a gider</li>
+        <li><strong>Nesile geçer</strong> — kalıcıdır</li>
+        <li>Yeşil ikon ile gösterilir</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">🏗️</span> DOĞRU BAŞLANGIÇ — BASE KURULUM</div>
+      <div class="flow">
+        <div class="flow-step">Yüksek stat wild dino bul</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">Tame et</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">Mutagen bas</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">Base Breeder ✓</div>
+      </div>
+      <div class="highlight">
+        Örn: Melee için wild stat aralığı <strong>35–45</strong> arası hedefle
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SECTION 2: MUTASYON HATTI -->
+  <div id="mutasyon" class="section">
+
+    <div class="card card-accent-gold">
+      <div class="card-title"><span class="icon">♀️</span> <span style="color:var(--gold)">DİŞİ DİZİLİMİ — CLEAN FEMALE MANTIĞI</span></div>
+      <ul>
+        <li><strong>20–30 adet dişi</strong> yeterlidir</li>
+        <li>Dişiler wild olmak zorunda değil</li>
+        <li>Statları önemli değil</li>
+        <li>Mutasyonsuz <strong style="color:var(--green)">(0/0)</strong> olması idealdir</li>
+      </ul>
+      <div class="highlight gold">
+        Dişiler stat kaynağı değil, sadece <strong>üretim bandıdır.</strong>
+      </div>
+    </div>
+
+    <div class="golden-rule">
+      <div class="rule-text">⚡ ALTIN KURAL ⚡<br><br>MUTASYON HATTI HER ZAMAN ERKEKTEN YÜRÜR</div>
+    </div>
+
+    <div class="card card-accent-green">
+      <div class="card-title"><span class="icon">♂️</span> ERKEK ÜZERİNDEN MUTASYON AKIŞI</div>
+      <div class="highlight green">
+        <strong>Erkek</strong> → en yüksek stat &nbsp;|&nbsp; <strong>Dişiler</strong> → clean (0/0)
+      </div>
+      <p style="margin-top:14px; font-weight:600;">Mutasyon geldiğinde:</p>
+      <div class="highlight green">
+        <strong>✓ İstenilen stat (HP / Melee):</strong> Yeni erkek yapılır, eski erkek emekli edilir
+      </div>
+      <div class="highlight red">
+        <strong>✗ İstenmeyen stat (Food / Oxy / Speed):</strong> Yavru elenir
+      </div>
+    </div>
+
+    <div class="card card-accent-purple">
+      <div class="card-title"><span class="icon">🔢</span> MUTASYON SAYACI — 20/20 KURALI</div>
+      <div class="highlight green"><strong>Erkek:</strong> 20+ &nbsp;|&nbsp; <strong>Dişi:</strong> 0 → Mutasyon hâlâ gelir ✓</div>
+      <div class="highlight red"><strong>Erkek:</strong> 20+ &nbsp;|&nbsp; <strong>Dişi:</strong> 20+ → ❌ Yeni mutasyon gelmez</div>
+      <div class="highlight purple">
+        🎯 <strong>Bu yüzden:</strong> Anne tarafı her zaman <strong>20/0 clean</strong> kalmalıdır
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SECTION 3: HATALAR & SENARYO -->
+  <div id="hatalar" class="section">
+
+    <div class="card card-accent-red">
+      <div class="card-title"><span class="icon">⚠️</span> <span style="color:var(--red)">SIK YAPILAN HATALAR</span></div>
+      <ul class="bad-list">
+        <li>Yavruya mutagen basmak</li>
+        <li>Dişileri mutasyonlu kullanmak</li>
+        <li>Erkek yerine dişi üzerinden mutasyon kovalamak</li>
+        <li>Food / Oxy mutasyonlarını hatta sokmak</li>
+        <li>"Weight yüksek, melee bozulur" diye düşünmek</li>
+      </ul>
+      <div class="note">
+        <span class="note-icon">📌</span>
+        Mutasyon en yüksek statı hedeflemez, tüm statlara <strong>eşit şansla</strong> gelir.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">🦕</span> ÖRNEK SENARYO — MANAGARMr</div>
+      <div class="scenario">
+        <div class="scenario-title">Başlangıç Koşulları</div>
+        <div class="scenario-row">
+          <span class="scenario-label">Wild Mana</span>
+          <span class="scenario-value">M28</span>
+        </div>
+        <div class="scenario-row">
+          <span class="scenario-label">Mutagen</span>
+          <span class="scenario-value highlight-accent">Basıldı ✓</span>
+        </div>
+        <div class="scenario-row">
+          <span class="scenario-label">Dişi sayısı</span>
+          <span class="scenario-value">20 clean (H31 / M36)</span>
+        </div>
+        <div class="scenario-row">
+          <span class="scenario-label">Yavru çıktı</span>
+          <span class="scenario-value highlight-green">H31 / M41 (Erkek) 🎉</span>
+        </div>
+      </div>
+      <p style="font-weight:700; margin-top:12px; color:var(--green)">✔️ Doğru hareket:</p>
+      <ul class="good-list">
+        <li>Bu erkek yeni damızlık yapılır</li>
+        <li>Mutagen <strong>tekrar basılmaz</strong></li>
+        <li>Clean dişilerle devam edilir</li>
+      </ul>
+    </div>
+
+    <div class="summary-box">
+      <p>
+        <span class="c1">Mutagen</span> hattı açar &nbsp;·&nbsp;
+        <span class="c2">Mutasyon</span> hattı ilerletir<br>
+        Hat her zaman <span class="c3">erkekten</span> yürür &nbsp;·&nbsp;
+        <span class="c4">Dişiler</span> temiz kalır
+      </p>
+    </div>
+
+  </div>
+
+  <!-- SECTION 4: MUTATOR -->
+  <div id="mutator" class="section">
+
+    <div class="card card-accent-purple">
+      <div class="card-title"><span class="icon">⚙️</span> <span style="color:var(--accent2)">MUTATOR NEDİR?</span></div>
+      <p>Tek Stryder Mutator, <strong>Genesis Part 2</strong>'de gelen bir yapıdır. Breeding ve dino geliştirme süreçlerini hızlandırmak ve optimize etmek için kullanılır.</p>
+      <div class="highlight purple">
+        Mutagen gibi stat açmaz, Mutasyon gibi kalıcı stat vermez — <strong>geçici ama kontrollü</strong> etki sağlar.
+      </div>
+    </div>
+
+    <div class="card-title" style="font-family:'Orbitron',sans-serif; font-size:13px; letter-spacing:2px; color:var(--text-dim); text-transform:uppercase; margin-bottom:16px; padding-left:4px;">
+      4 ANA MOD
+    </div>
+
+    <div class="mode-grid">
+      <div class="mode-card mode-pulse">
+        <div class="mode-label">🟢 Pulse Mode</div>
+        <div class="mode-desc">Çevresindeki tame dino'lara geçici buff verir. PvE / farm amaçlı. Breeding ile ilgili değil.</div>
+      </div>
+      <div class="mode-card mode-breed">
+        <div class="mode-label">🟣 Breeding Boost</div>
+        <div class="mode-desc"><strong>EN ÖNEMLİ.</strong> Yakındaki çift için mutasyon gelme ihtimalini artırır. Sadece o çiftleşme için.</div>
+      </div>
+      <div class="mode-card mode-gender">
+        <div class="mode-label">🔵 Gender Swap</div>
+        <div class="mode-desc">Dino'nun cinsiyetini değiştirir. Erkek ↔ Dişi. Mutasyon, mutagen, stat etkilenmez.</div>
+      </div>
+      <div class="mode-card mode-stat">
+        <div class="mode-label">🔴 Stat Boost</div>
+        <div class="mode-desc">Dino'nun statlarını geçici artırır. Boss / PvE savaş. Breed hattına etkisi yok.</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px">
+      <div class="card-title"><span class="icon">⚡</span> MUTATOR + MUTASYON MANTIĞI</div>
+      <p>Mutator, mutasyonu ERKEĞE veya DİŞİYE <strong>taşımaz.</strong></p>
+      <div class="highlight purple">
+        Mutasyon hattı hâlâ <strong>erkek üzerinden</strong> yürür. Dişiler clean kalmalıdır.
+      </div>
+      <p>Mutator sadece şunu yapar: <strong>"Bu eşleşmede mutasyon gelme ihtimalini artır"</strong></p>
+      <ul class="bad-list" style="margin-top:12px">
+        <li>Yanlış stat gelirse → yine çöpe gider</li>
+        <li>Food / Oxy mutasyonu → yine elenir</li>
+      </ul>
+    </div>
+
+    <div class="card card-accent-gold">
+      <div class="card-title"><span class="icon">📅</span> MUTATOR NE ZAMAN KULLANILIR?</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px">
+        <div>
+          <p style="color:var(--green); font-family:'Orbitron',sans-serif; font-size:11px; letter-spacing:1px; margin-bottom:8px;">✓ KULLAN</p>
+          <ul class="good-list">
+            <li>Endgame breeding</li>
+            <li>20+ mutasyon kovalanıyorsa</li>
+            <li>Zaman kısıtlıysa</li>
+          </ul>
+        </div>
+        <div>
+          <p style="color:var(--red); font-family:'Orbitron',sans-serif; font-size:11px; letter-spacing:1px; margin-bottom:8px;">✗ GEREK YOK</p>
+          <ul class="bad-list">
+            <li>İlk base kurulumda</li>
+            <li>Tek dino hedefliyorsan</li>
+            <li>Erken PvE aşamasında</li>
+          </ul>
+        </div>
+      </div>
+      <div class="highlight gold" style="margin-top:14px">
+        <strong>Mutator = Lüks Hızlandırıcı</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">🦕</span> ÖRNEK SENARYO (MUTATOR'LÜ)</div>
+      <div class="scenario">
+        <div class="scenario-title">Koşullar</div>
+        <div class="scenario-row"><span class="scenario-label">Erkek</span><span class="scenario-value">M41</span></div>
+        <div class="scenario-row"><span class="scenario-label">Dişiler</span><span class="scenario-value">20 clean (0/0)</span></div>
+        <div class="scenario-row"><span class="scenario-label">Mutator</span><span class="scenario-value highlight-green">Aktif (Breeding Boost)</span></div>
+        <div class="scenario-row"><span class="scenario-label">Sonuç</span><span class="scenario-value highlight-accent">Mutasyon ihtimali ↑</span></div>
+      </div>
+      <div class="note" style="margin-top:12px">
+        <span class="note-icon">⚠️</span>
+        Ama kurallar DEĞİŞMEZ: Stat RNG · Erkek hattı · Clean dişi zorunlu
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SECTION 5: ÖZET TABLO -->
+  <div id="ozet" class="section">
+
+    <div class="section-title">
+      <span class="section-num">🧬</span>
+      SİSTEM KARŞILAŞTIRMA TABLOSU
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Sistem</th>
+            <th>Ne yapar?</th>
+            <th>Kalıcı mı?</th>
+            <th>Nesile geçer mi?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong style="color:var(--green)">Mutagen 💉</strong></td>
+            <td>Stat tavanı açar</td>
+            <td><span class="check">✅ Evet</span></td>
+            <td><span class="warn">⚠️ Sadece wild tame'dan</span></td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--accent2)">Mutation 🔬</strong></td>
+            <td>+2 stat verir</td>
+            <td><span class="check">✅ Evet</span></td>
+            <td><span class="check">✅ Evet</span></td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--accent)">Mutator ⚙️</strong></td>
+            <td>Şans / hız / geçici buff</td>
+            <td><span class="cross">❌ Hayır</span></td>
+            <td><span class="cross">❌ Hayır</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="summary-box" style="margin-top:30px">
+      <p>
+        <span class="c1">Mutagen</span> yolu açar &nbsp;·&nbsp;
+        <span class="c2">Mutasyon</span> yolu ilerletir &nbsp;·&nbsp;
+        <span class="c3">Mutator</span> süreci hızlandırır<br><br>
+        Ama kural değişmez:<br>
+        <span class="c4">Hat erkekten yürür &nbsp;·&nbsp; Dişiler temiz kalır</span>
+      </p>
+    </div>
+
+    <div class="card" style="margin-top:24px">
+      <div class="card-title"><span class="icon">💡</span> HIZLI HATIRLATICI</div>
+      <div class="highlight green"><strong>✓</strong> Mutagen → sadece wild tame üzerine, 1 kez</div>
+      <div class="highlight green"><strong>✓</strong> Dişiler → her zaman 0/0 clean</div>
+      <div class="highlight green"><strong>✓</strong> Mutasyon hattı → hep erkekten</div>
+      <div class="highlight green"><strong>✓</strong> İstenmeyen stat → anında ele</div>
+      <div class="highlight gold"><strong>⚡</strong> Mutator → endgame lüks, kural değiştirmez</div>
+    </div>
+
+  </div>
+
+  <footer>
+    <div>ARK Survival Evolved &nbsp;·&nbsp; Mutagen & Mutasyon Rehberi</div>
+    <div style="margin-top:8px; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:rgba(106,143,168,0.6)">PvE Odaklı · Genesis 2 Uyumlu</div>
+  </footer>
+</div>
+
+<script>
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+  }
+</script>
+</body>
+</html>
